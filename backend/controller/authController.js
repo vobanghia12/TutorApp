@@ -1,8 +1,8 @@
+const db = require("../util/database");
 const Account = require("../model/account");
 const Teacher = require("../model/teacher");
 const Student = require("../model/student");
 const bscrypt = require("bcrypt");
-const con = require("../util/database");
 //bcrypt is hahsing function
 const authController = {
   //signup a user also save the user in database and save either the user is teacher or student
@@ -34,6 +34,17 @@ const authController = {
       //Initialize the account in database
     } catch {
       res.status(500).send({ message: "Fail to create account" });
+    }
+  },
+
+  //login a user
+  login: async (req, res) => {
+    try {
+      const user = db.query(
+        `SELECT * FROM user_account WHERE userID = '${req.body.username}'`
+      );
+    } catch (err) {
+      res.status(500).json(err);
     }
   },
 };
