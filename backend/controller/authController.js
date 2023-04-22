@@ -37,14 +37,30 @@ const authController = {
     }
   },
 
-  //login a user
+  //login as a student or teacher
   login: async (req, res) => {
     try {
-      const user = db.query(
+      //find the user in database
+      const user = await db.query(
         `SELECT * FROM user_account WHERE userID = '${req.body.username}'`
       );
+      if (user[0].length === 0) {
+        res.status(404).json({ message: "User not found" });
+      }
+
+      //compare the password
+      const validPassword = await bscrypt.compare(
+        req.body.password,
+        user[0][0].password
+      );
+      if (!validPassword) {
+        res.status(400).json({ message: "Invalid password" });
+      } else {
+        res.status(200).json({ message: "Login successfully" });
+      }
+      console.log(user[0]);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: "Fail to login" });
     }
   },
 };
