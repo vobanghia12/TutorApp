@@ -26,7 +26,7 @@ const SignUpTeacher = (props) => {
       setPassword("");
       setFirstName("");
       setLastName("");
-      console.log(res);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -63,6 +63,7 @@ const SignUpTeacher = (props) => {
               </label>
               <div className="mt-2">
                 <input
+                  value={email}
                   id="email"
                   name="email"
                   type="email"
@@ -85,6 +86,7 @@ const SignUpTeacher = (props) => {
               </div>
               <div className="mt-2">
                 <input
+                  value={password}
                   id="password"
                   name="password"
                   type="password"
@@ -105,6 +107,7 @@ const SignUpTeacher = (props) => {
               </label>
               <div className="mt-2">
                 <input
+                  value={firstname}
                   id="firstname"
                   name="firstname"
                   type="text"
@@ -120,10 +123,11 @@ const SignUpTeacher = (props) => {
                 htmlFor="lasttname"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                First Name
+                Last Name
               </label>
               <div className="mt-2">
                 <input
+                  value={lastname}
                   id="lastname"
                   name="lastname"
                   type="text"

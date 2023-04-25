@@ -1,12 +1,12 @@
 const db = require("../util/database");
 class Account {
-  constructor(userID, password, isTeacher) {
-    this.userID = userID;
+  constructor(username, password, isTeacher) {
+    this.username = username;
     this.password = password;
     this.isTeacher = isTeacher;
   }
   async save() {
-    const query = `INSERT INTO user_account (userID, password, isTeacher) VALUES ('${this.userID}', '${this.password}', '${this.isTeacher}')`;
+    const query = `INSERT INTO accounts (username, password, isTeacher) VALUES ('${this.username}', '${this.password}', '${this.isTeacher}')`;
     await db.query(query);
   }
 }

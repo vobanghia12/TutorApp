@@ -19,14 +19,17 @@ const authController = {
       //save the account in database
       await newAccount.save();
       //save to student or teacher table
+      const query2 = `SELECT userID FROM accounts WHERE username = '${username}'`;
+      const res2 = await db.query(query2);
       if (isTeacher === 1) {
         //create new teacher
         console.log("yeah");
-        const newTeacher = new Teacher(username, firstname, lastname);
+        console.log(res2[0][0].userID);
+        const newTeacher = new Teacher(res2[0][0].userID, firstname, lastname);
         await newTeacher.save();
       } else {
         //create new student
-        const newStudent = new Student(username, firstname, lastname);
+        const newStudent = new Student(res2[0][0].userID, firstname, lastname);
         await newStudent.save();
       }
 
@@ -43,7 +46,7 @@ const authController = {
     try {
       //find the user in database
       const user = await db.query(
-        `SELECT * FROM user_account WHERE userID = '${req.body.username}'`
+        `SELECT * FROM accounts WHERE username = '${req.body.username}'`
       );
       if (user[0].length === 0) {
         res.status(404).json({ message: "User not found" });
