@@ -19,8 +19,9 @@ const authController = {
       //save the account in database
       await newAccount.save();
       //save to student or teacher table
-      if (req.body.isTeacher) {
+      if (isTeacher === 1) {
         //create new teacher
+        console.log("yeah");
         const newTeacher = new Teacher(username, firstname, lastname);
         await newTeacher.save();
       } else {
@@ -56,9 +57,9 @@ const authController = {
       if (!validPassword) {
         res.status(400).json({ message: "Invalid password" });
       } else {
-        res.status(200).json({ message: "Login successfully" });
+        res.status(200).json(user[0]);
+        console.log(user[0]);
       }
-      console.log(user[0]);
     } catch (err) {
       res.status(500).json({ message: "Fail to login" });
     }
