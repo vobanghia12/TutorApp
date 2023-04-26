@@ -14,7 +14,7 @@ const NavBar = () => {
         <ul className="flex list-none absolute right-8 font-medium">
           <li className=" mr-5">
             <p>
-              Hi <span>{user[0].username}</span>
+              Hi <span>{user[0].T_Fname}</span>
             </p>
           </li>
           <li>

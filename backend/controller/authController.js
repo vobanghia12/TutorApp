@@ -60,8 +60,18 @@ const authController = {
       if (!validPassword) {
         res.status(400).json({ message: "Invalid password" });
       } else {
-        res.status(200).json(user[0]);
-        console.log(user[0]);
+        if (user[0][0].isTeacher === 1) {
+          console.log("yeah");
+          const result = await db.query(
+            `SELECT * FROM teachers, accounts WHERE teachers.userID = '${user[0][0].userID}' AND teachers.userID = accounts.userID`
+          );
+          res.status(200).json(result[0]);
+        } else {
+          const result = await db.query(
+            `SELECT * FROM students, accounts WHERE userID = '${user[0][0].userID}' AND students.userID = accounts.userID`
+          );
+          res.status(200).json(user[0]);
+        }
       }
     } catch (err) {
       res.status(500).json({ message: "Fail to login" });

@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import Card from "../components/card";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import AddClass from "./AddClass";
 
 const Teacher = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [allClasses, setAllClasses] = useState([]);
+  const user = useSelector((state) => state.auth.login.currentUser);
+  useEffect(() => {
+    async function getData() {
+      const res = await axios.get(
+        `http://localhost:8000/v1/teacher/getClasses/${user[0].userID}`
+      );
+      return res;
+    }
+    getData().then((res) => {
+      setAllClasses(res.data);
+    });
+  }, [allClasses]);
+  console.log(allClasses);
   return (
     <>
-      <button className="m-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Add Class
-      </button>
+      <AddClass id={user[0].userID} />
+      <div className="flex mt-14 flex-wrap">
+        {allClasses.map((item) => (
+          <Card item={item} />
+        ))}
+      </div>
     </>
   );
 };
