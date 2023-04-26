@@ -20,11 +20,8 @@ export default function Login() {
         password: password,
       };
       loginUser(newUser, dispatch, navigate);
-      setShow(true);
       setEmail("");
       setPassword("");
-      setShow(true);
-      navigate("/Teacher");
     } catch (err) {
       console.log(err);
     }

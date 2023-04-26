@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 const NavBar = () => {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.auth.login.currentUser);
   return (
     <nav className="flex items-center">
       <div className="flex items-center">
@@ -12,7 +13,9 @@ const NavBar = () => {
       {user ? (
         <ul className="flex list-none absolute right-8 font-medium">
           <li className=" mr-5">
-            <p> {user}</p>
+            <p>
+              Hi <span>{user[0].username}</span>
+            </p>
           </li>
           <li>
             <Link to="/Logout">Log Out</Link>

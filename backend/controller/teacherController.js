@@ -1,5 +1,5 @@
-const Teacher = require("../model/teacher");
-const Teaches = require("../model/teaches");
+const Classes = require("../model/classes");
+const db = require("../util/database");
 
 const teacherController = {
   //Request to create a class
@@ -15,19 +15,33 @@ const teacherController = {
   },
 
   //Add a new class
+  //post request
   addClass: async (req, res) => {
     try {
-      //need to get teacher id to crerate teaches table
-      let { C_code, C_name, C_category, C_endDate, C_time, T_ID } =
+      let { C_code, C_name, C_category, C_startDate, C_endDate, C_time, T_ID } =
         await req.body;
-      const query2 = `SELECT C_ID FROM classes WHERE C_code = '${C_code}'`;
-      const query = `INSERT INTO teaches(classID, teacherID) VALUES ('${C_ID}', '${T_ID}')`;
-      const query1 = `INSERT INTO classes (C_name, C_category, C_startDate, C_endDate, C_time, T_ID) VALUES ('${C_ID}','${C_name}', '${C_category}', '${C_startDate}', '${C_endDate}', '${C_time}', '${T_ID}')`;
-      await db.query(query);
-      await db.query(query1);
+      //need to get teacher id to crerate teaches table
+      let classes = new Classes(
+        C_code,
+        C_name,
+        C_category,
+        C_startDate,
+        C_endDate,
+        C_time
+      );
+      //convert to date from string
+      await classes.save();
+      const result = await db.query(
+        `SELECT C_ID FROM classes WHERE C_code = '${classes.C_code}'`
+      );
+      console.log(result[0][0].C_ID);
+      console.log(T_ID);
+      await db.query(
+        `INSERT INTO teaches(classID, teacherID) VALUES ('${result[0][0].C_ID}', '${T_ID}')`
+      );
       res.status(200).json({ message: "Class added successfully" });
     } catch (err) {
-      res.status(500).json({ message: "Fail to add class" });
+      res.status(500).json(err.message);
     }
   },
 
@@ -39,3 +53,5 @@ const teacherController = {
 
   //View all subjects that a teacher is teaching
 };
+
+module.exports = teacherController;
