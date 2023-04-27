@@ -51,7 +51,7 @@ const authController = {
       if (user[0].length === 0) {
         res.status(404).json({ message: "User not found" });
       }
-
+      console.log(user);
       //compare the password
       const validPassword = await bscrypt.compare(
         req.body.password,
@@ -60,6 +60,7 @@ const authController = {
       if (!validPassword) {
         res.status(400).json({ message: "Invalid password" });
       } else {
+        console.log(user[0][0].isTeacher);
         if (user[0][0].isTeacher === 1) {
           console.log("yeah");
           const result = await db.query(
@@ -68,9 +69,9 @@ const authController = {
           res.status(200).json(result[0]);
         } else {
           const result = await db.query(
-            `SELECT * FROM students, accounts WHERE userID = '${user[0][0].userID}' AND students.userID = accounts.userID`
+            `SELECT * FROM students, accounts WHERE students.userID = '${user[0][0].userID}' AND students.userID = accounts.userID`
           );
-          res.status(200).json(user[0]);
+          res.status(200).json(result[0]);
         }
       }
     } catch (err) {

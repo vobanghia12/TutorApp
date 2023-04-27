@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const auth = require("./routes/auth");
 const teacher = require("./routes/teacher");
+const student = require("./routes/student");
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use("/v1/auth", auth);
 //app.use("/v1/class", teacher);
 app.use("/v1/teacher", teacher);
+app.use("/v1/student", student);
 
 app.listen(8000, () => {
   console.log("Server is running on port 8000");

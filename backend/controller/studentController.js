@@ -4,9 +4,10 @@ const studentController = {
   //View all classes
   viewclass: async (req, res) => {
     try {
-      const query = `SELECT C_ID, C_time, C_name, C_startDate, C_endDate, C_category FROM class, studentclass WHERE class.C_ID = studentclass.classID AND studentclass.studentID = '${req.params.id}'`;
+      const query = `SELECT C_ID, C_code, C_time, C_name, C_startDate, C_endDate, C_category FROM classes, studentclass WHERE classes.C_ID = studentclass.classID AND studentclass.studentID = '${req.params.id}'`;
       // res[0] contains the data
-      const res = await db.query(query);
+      const result = await db.query(query);
+      res.status(200).json(result[0]);
     } catch (err) {
       res.status(500).json({ message: "Fail to view class" });
     }
@@ -16,7 +17,7 @@ const studentController = {
   registerclass: async (req, res) => {
     try {
       let { C_ID, studentID } = await req.body;
-      const query = `INSERT INTO studentclass (classID, studentID) VALUES ('${C_ID}', '${studentID}')`;
+      const query = `INSERT INTO tutorapp2.studentclass (classID, studentID) VALUES ('${C_ID}', '${studentID}')`;
       await db.query(query);
       res.status(200).json({ message: "Class registered successfully" });
     } catch (err) {
@@ -36,6 +37,18 @@ const studentController = {
     }
   },
 
+  searchCategories: async (req, res) => {
+    try {
+      let { C_category } = await req.body;
+      const query = `SELECT * FROM classes WHERE C_category = '${C_category}'`;
+      // res[0] contains the data
+      const result = await db.query(query);
+      res.status(200).json(result[0]);
+    } catch (err) {
+      res.status(500).json({ message: "Fail to search class" });
+    }
+  },
+
   //Search for a class with class name
   searchNameClass: async (req, res) => {
     try {
@@ -50,10 +63,13 @@ const studentController = {
   searchCodeClass: async (req, res) => {
     try {
       let { C_code } = await req.body;
-      const query = `SELECT C_ID, C_time, C_name, C_startDate, C_endDate, C_category FROM class WHERE C_code = '${C_code}'`;
+      const query = `SELECT C_ID, C_time, C_name, C_startDate, C_endDate, C_category FROM classes WHERE C_code = '${C_code}'`;
+      const result = await db.query(query);
       // res[0] contains the data
-      const res = await db.query(query);
-    } catch (err) {}
+      res.status(200).json(result[0]);
+    } catch (err) {
+      res.status(500).json({ message: "Fail to search class" });
+    }
   },
 
   //View all classes that a student is taking (today is between start date and end date)
