@@ -19,8 +19,16 @@ const authController = {
       //save the account in database
       await newAccount.save();
       //save to student or teacher table
-      const query2 = `SELECT userID FROM accounts WHERE username = '${username}'`;
-      const res2 = await db.query(query2);
+
+      const query2 = `SELECT userID FROM accounts WHERE username = ?`;
+      const values = [username];
+      const res2 = await db.query(query2, values, (error, results) => {
+        if (error) {
+          throw error;
+        } else return results;
+      });
+
+      console.log(res2[0][0]);
       if (isTeacher === 1) {
         //create new teacher
         console.log("yeah");
@@ -45,9 +53,17 @@ const authController = {
   login: async (req, res) => {
     try {
       //find the user in database
+      const values = [req.body.username];
       const user = await db.query(
-        `SELECT * FROM accounts WHERE username = '${req.body.username}'`
+        `SELECT * FROM accounts WHERE username = ?`,
+        values,
+        (error, results) => {
+          if (error) {
+            throw error;
+          } else return results;
+        }
       );
+
       if (user[0].length === 0) {
         res.status(404).json({ message: "User not found" });
       }
@@ -63,13 +79,27 @@ const authController = {
         console.log(user[0][0].isTeacher);
         if (user[0][0].isTeacher === 1) {
           console.log("yeah");
+          const value1 = [user[0][0].userID];
           const result = await db.query(
-            `SELECT * FROM teachers, accounts WHERE teachers.userID = '${user[0][0].userID}' AND teachers.userID = accounts.userID`
+            `SELECT * FROM teachers, accounts WHERE teachers.userID = ? AND teachers.userID = accounts.userID`,
+            value1,
+            (error, results) => {
+              if (error) {
+                throw error;
+              } else return results;
+            }
           );
           res.status(200).json(result[0]);
         } else {
+          const value1 = [user[0][0].userID];
           const result = await db.query(
-            `SELECT * FROM students, accounts WHERE students.userID = '${user[0][0].userID}' AND students.userID = accounts.userID`
+            `SELECT * FROM students, accounts WHERE students.userID = ? AND students.userID = accounts.userID`,
+            value1,
+            (error, results) => {
+              if (error) {
+                throw error;
+              } else return results;
+            }
           );
           res.status(200).json(result[0]);
         }
