@@ -13,7 +13,7 @@ export default function AddClass(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/v1/teacher/addClass",
+        "http://localhost:8000/v1/teacher/registerClass",
         {
           C_code: classCode,
           C_name: className,

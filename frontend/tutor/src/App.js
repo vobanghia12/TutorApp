@@ -6,6 +6,8 @@ import styles from "./index.css";
 import Choices from "./pages/Choices";
 import Login from "./pages/Login";
 import Teacher from "./pages/Teacher";
+import Student from "./pages/Student";
+import SearchClass from "./pages/SearchClass";
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
           <Route path="/Choices" element={<Choices />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Teacher" element={<Teacher />} />
+          <Route path="/Student" element={<Student />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/searchClass" element={<SearchClass />} />
         </Routes>
       </div>
     </Router>
